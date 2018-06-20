@@ -34,4 +34,8 @@ public class ExpressServiceImpl implements ExpressService{
     public int saveWeight(String barCode, Integer d){
         return expressDAO.saveWeight(barCode,d);
     }
+
+    public Express saveData(Express express){
+        return expressDAO.saveData(express);
+    }
 }

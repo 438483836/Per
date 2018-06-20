@@ -13,7 +13,7 @@ import java.net.Socket;
 public class MyClient {
 
     //服務器地址
-    public static final String IP_ADR = "10.96.10.163";
+    public static final String IP_ADR = "10.96.10.10";
 
     //服務端口
     public static final int PORT = 2000;

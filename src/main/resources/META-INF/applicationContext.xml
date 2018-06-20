@@ -16,11 +16,11 @@
         <context:component-scan base-package="com.wl.service"/>
         <context:component-scan base-package="com.wl.entity"/>
 
-        <bean id="scoketConfig" class="com.wl.socket.ScoketConfig">
-                <property name="ip" value="${scoket.host}"></property>
-                <property name="port" value="${scoket.port}"></property>
-                <property name="packIp" value="${scoket.pack.host}"></property>
-                <property name="packPort" value="${scoket.pack.port}"></property>
+        <bean id="socketConfig" class="com.wl.socket.SocketConfig">
+                <property name="ip" value="${socket.host}"></property>
+                <property name="port" value="${socket.port}"></property>
+                <property name="packIp" value="${socket.pack.host}"></property>
+                <property name="packPort" value="${socket.pack.port}"></property>
         </bean>
 
 </beans>

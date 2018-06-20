@@ -1,6 +1,7 @@
 package com.wl.socket.client;
 
-import com.wl.socket.ScoketConfig;
+
+import com.wl.socket.SocketConfig;
 import com.wl.util.ByteUtil;
 
 import java.io.DataInputStream;
@@ -21,7 +22,7 @@ public class ClientGetMsg {
 
         try {
             //创建一个流套接字并将其连接到指定主机上的指定端口号
-            socket = new Socket(ScoketConfig.getIp(), ScoketConfig.getPort());
+            socket = new Socket(SocketConfig.getIp(), SocketConfig.getPort());
             //socket = new Socket("10.96.10.10",2000);
             System.out.println("服务以当前连接状态:" + socket.isConnected());
             //读取服务器端数据

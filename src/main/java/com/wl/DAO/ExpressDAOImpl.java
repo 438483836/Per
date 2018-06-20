@@ -48,4 +48,9 @@ public class ExpressDAOImpl implements ExpressDAO {
         return query.executeUpdate();
     }
 
+    public Express saveData(Express express) {
+        return (Express)sessionFactory.getCurrentSession().save(express);
+    }
+
+
 }

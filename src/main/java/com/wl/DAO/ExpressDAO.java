@@ -13,4 +13,5 @@ public interface ExpressDAO {
     public Express getByBarCode(String barCode);
     public void Update(Express u);
     public int saveWeight(String barCode,Integer d);
+    public Express saveData(Express express);
 }

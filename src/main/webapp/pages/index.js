@@ -1,4 +1,4 @@
-﻿var base_url = 'http://localhost:8080/WlDemo';
+﻿var base_url = 'http://localhost:8080';
 
 
 var login = function () {
@@ -59,6 +59,52 @@ var pack = function ( e,s) {
             errorBox("请求失败！");
         }
     });
+}
+
+var search = function () {
+    var bar = document.getElementById("barcode2").value;
+    console.log(bar);
+    $.ajax({
+        url: base_url + "/search",
+        cache: false,
+        data: {barcode: bar},
+        success: function (data) {
+            noticeBox("查询成功=====>" + data);
+        },
+        error: function () {
+            errorBox("查询失败! ");
+        }
+        
+    });
+}
+
+var saveData = function () {
+
+    var dataPacket = document.getElementById("dataPacket").value;
+    var packetSize = document.getElementById("packetSize").value;
+    var plcCode = document.getElementById("plcCode").value;
+    var barCode = document.getElementById("barCode3").value;
+    var packageInt = document.getElementById("packageInt").value;
+    var packageDec = document.getElementById("packageDec").value;
+    var slogan = document.getElementById("slogan").value;
+    var backup = document.getElementById("backup").value;
+    var checkData = document.getElementById("checkData").value;
+
+    console.log(dataPacket+"--"+packetSize+""+plcCode+"--"+barCode+"--"+packageInt+"--"+packageDec+"--"+slogan+"--"+backup+"--"+checkData);
+    $.ajax({
+        url: base_url + "/saveData",
+        cache: false,
+        data: {dataPacket: dataPacket, packetSize: packetSize, plcCode: plcCode, barCode: barCode, packageInt: packageInt, packageDec: packageDec, slogan: slogan, backup: backup, checkData: checkData},
+        success: function (data) {
+            noticeBox("保存成功" + data);
+        },
+        error: function () {
+          noticeBox("保存失败! ");  
+        },
+
+    });
+
+    
 }
 
 

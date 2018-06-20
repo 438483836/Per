@@ -12,4 +12,5 @@ public interface ExpressService {
     public Express getByBarCode(String barCode);
     public int save(Express u);
     public int saveWeight(String barCode, Integer d);
+    public Express saveData(Express express);
 }

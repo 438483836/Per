@@ -1,10 +1,6 @@
 package com.wl.socket.client;
 
 import com.wl.socket.manage.PackSocketManage;
-import com.wl.util.ByteUtil;
-import com.wl.util.CheckUtil;
-import sun.security.krb5.internal.crypto.Aes256;
-
 import java.io.DataOutputStream;
 import java.net.Socket;
 

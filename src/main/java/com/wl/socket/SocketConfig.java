@@ -1,15 +1,18 @@
 package com.wl.socket;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  * @author jianghc
  * @create 2017-04-29 11:32
  **/
-public class ScoketConfig {
+@Entity
+@Table(name = "t_socketConfig")
+public class SocketConfig {
     private static String ip;
 
     private static Integer port;
-
-
 
     public static String packIp;
 
@@ -36,7 +39,7 @@ public class ScoketConfig {
     }
 
     public  void setPackIp(String packIp) {
-        ScoketConfig.packIp = packIp;
+        SocketConfig.packIp = packIp;
     }
 
     public static Integer getPackPort() {
@@ -44,7 +47,7 @@ public class ScoketConfig {
     }
 
     public  void setPackPort(Integer packPort) {
-        ScoketConfig.packPort = packPort;
+        SocketConfig.packPort = packPort;
     }
 
 

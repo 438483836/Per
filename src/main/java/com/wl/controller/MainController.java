@@ -1,14 +1,18 @@
 package com.wl.controller;
 
 import com.wl.cache.ExpressCache;
+import com.wl.entity.Complement;
 import com.wl.entity.Express;
 import com.wl.entity.User;
+import com.wl.service.ComplementService;
 import com.wl.service.ExpressService;
 import com.wl.service.UserService;
+import com.wl.socket.client.ClientSendMsg;
 import com.wl.socket.client.PackGetMsg;
 import com.wl.socket.client.PackSendMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +32,8 @@ public class MainController {
     private UserService userService;
     @Autowired
     private ExpressService expressService;
+    @Autowired
+    private ComplementService complementService;
 
     @RequestMapping("")
     public String home() {
@@ -60,13 +66,14 @@ public class MainController {
     @RequestMapping(value = "/upload"
             , method = RequestMethod.GET)
     public void upload(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        /*String barcode = request.getParameter("barcode");
+        String barcode = request.getParameter("barcode");
         String smt = request.getParameter("smt");
         String exit = request.getParameter("exit");
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         PrintWriter writer = response.getWriter();
         response.setStatus(200);
         if (StringUtils.isEmpty(barcode)) {
+
             writer.write("条码缺失");
             return;
         }
@@ -84,13 +91,11 @@ public class MainController {
             writer.write("服务异常," + e.getMessage());
             return;
         }
-        writer.write("上件成功");*/
+        writer.write("上件成功");
 
         //expressService.save(new Express("123","231",1));
-/*
 Express express = expressService.getByBarCode("123");
         System.out.println("===>"+express.getHex());
-*/
         expressService.saveWeight("123",2);
 
     }
@@ -186,6 +191,65 @@ Express express = expressService.getByBarCode("123");
         } catch (Exception e) {
             writer.write("失败");
         }
+
+    }
+
+    @RequestMapping(value = "/search",method = RequestMethod.GET)
+    public void search(HttpServletRequest request, HttpServletResponse response)throws IOException{
+
+        String barCode = request.getParameter("barcode");
+
+        response.setHeader("Content-type","text/html;charset=UTF-8");
+
+        Express express = expressService.getByBarCode(barCode);
+
+        if(express != null){
+
+            PrintWriter pWriter = response.getWriter();
+            pWriter.write(express.getBarCode());
+            pWriter.write(express.getConsigneeName());
+            pWriter.write(express.getConsigneeAddress());
+            response.setStatus(200);
+
+        }else {
+            response.setStatus(500);
+        }
+
+    }
+
+    @RequestMapping(value = "/saveData", method = RequestMethod.GET)
+    public void saveData(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        String packet = request.getParameter("dataPacket");
+        String packetSize = request.getParameter("packetSize");
+        String plcCode = request.getParameter("plcCode");
+        String barCode = request.getParameter("barCode");
+        String packageInt = request.getParameter("packageInt");
+        String packageDec = request.getParameter("packageDec");
+        String slogan = request.getParameter("slogan");
+        String backup = request.getParameter("backup");
+        String check = request.getParameter("checkData");
+
+
+        Complement c = new Complement();
+        c.setDataPacket(Integer.parseInt(packet));
+        c.setPacketSize(packetSize);
+        c.setPlcCode(plcCode);
+        c.setBarCode(barCode);
+        c.setPackageInt(Integer.parseInt(packageInt));
+        c.setPackageDec(Integer.parseInt(packageDec));
+        c.setSlogan(Integer.parseInt(slogan));
+        c.setBackup(backup);
+        c.setCheckData(check);
+
+        response.setHeader("Content-type","text/html;charset=UTF-8");
+
+        int comp = complementService.save(c);
+        if(comp > 0){
+            response.setStatus(200);
+        }else {
+            response.setStatus(500);
+        }
+
 
     }
 

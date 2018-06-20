@@ -1,6 +1,6 @@
 package com.wl.socket.thread;
 
-import com.wl.socket.ScoketConfig;
+import com.wl.socket.SocketConfig;
 
 import javax.annotation.PostConstruct;
 
@@ -24,7 +24,7 @@ public class GetMsgThread {
                         System.out.println("已失败10次，不再尝试连接");
                         break;
                     }
-                    System.out.println("第"+i+"次尝试=====异步线程启动===>>>" + ScoketConfig.getIp() + "====>>" + ScoketConfig.getPort());
+                    System.out.println("第"+i+"次尝试=====异步线程启动===>>>" + SocketConfig.getIp() + "====>>" + SocketConfig.getPort());
                     //ClientGetMsg.getMsgFromPlc();
                     i++;
                 }

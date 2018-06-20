@@ -16,6 +16,9 @@ public class Express implements Serializable {
 
     private Integer id;
 
+    /**
+     * 条码
+     */
     private String barCode;
 
     private String code16;
@@ -154,6 +157,14 @@ public class Express implements Serializable {
         this.barCode = barCode;
         this.code16 = code16;
         this.groupId = groupId;
+    }
+
+    public Express(String barCode, String consignorName, String consignorAddress, String consigneeName, String consigneeAddress){
+        this.barCode = barCode;
+        this.consignorName = consignorName;
+        this.consignorAddress = consignorAddress;
+        this.consigneeName = consigneeName;
+        this.consigneeAddress = consigneeAddress;
     }
 
     public Express() {
