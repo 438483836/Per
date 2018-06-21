@@ -61,6 +61,8 @@ public class Complement implements Serializable{
      */
     private String checkData;
 
+
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "Id", unique = true, nullable = false)
@@ -144,7 +146,7 @@ public class Complement implements Serializable{
 
     public void setCheckData(String checkData) {
         this.checkData = checkData;
-    }
+     }
 
 
     public Complement(){

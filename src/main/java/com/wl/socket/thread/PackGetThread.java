@@ -1,6 +1,8 @@
 package com.wl.socket.thread;
 
 import com.wl.service.ExpressService;
+import com.wl.socket.client.PackGetMsg;
+import com.wl.socket.client.PackSendMsg;
 import com.wl.socket.manage.PackSocketManage;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,7 +33,7 @@ public class PackGetThread {
                     if (i > 10) {
                         break;
                     }
-                    //PackGetMsg.getMsgFromPlc(expressService);
+                    PackGetMsg.getMsgFromPlc(expressService);
                 }
             }
         });
@@ -52,7 +54,7 @@ public class PackGetThread {
                         break;
                     }
                     try {
-                        //PackSendMsg.sendMsgToPlc();
+                        PackSendMsg.sendMsgToPlc();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

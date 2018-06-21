@@ -50,6 +50,7 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
+    <bean id="getAutoComplementThread" class="com.wl.socket.thread.GetAutoComplementThread"></bean>
     <bean id="testThread" class="com.wl.socket.thread.GetMsgThread"/>
     <bean id="packGetThread" class="com.wl.socket.thread.PackGetThread"/>
     <bean id="initCacheThread" class="com.wl.socket.thread.InitCacheThread"/>

@@ -1,6 +1,7 @@
 package com.wl.socket.thread;
 
 import com.wl.socket.SocketConfig;
+import com.wl.socket.client.ClientGetMsg;
 
 import javax.annotation.PostConstruct;
 
@@ -25,7 +26,7 @@ public class GetMsgThread {
                         break;
                     }
                     System.out.println("第"+i+"次尝试=====异步线程启动===>>>" + SocketConfig.getIp() + "====>>" + SocketConfig.getPort());
-                    //ClientGetMsg.getMsgFromPlc();
+                    ClientGetMsg.getMsgFromPlc();
                     i++;
                 }
             }

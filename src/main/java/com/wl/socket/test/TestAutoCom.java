@@ -11,7 +11,7 @@ public class TestAutoCom {
 
         GetAutoComplement autoComplement = new GetAutoComplement();
 
-        autoComplement.getMesFromPLC();
+        //autoComplement.getMesFromPLC();
 
     }
 }

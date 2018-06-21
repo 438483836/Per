@@ -1,7 +1,5 @@
 package com.wl.util;
 
-import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,6 +78,17 @@ public class CheckUtil {
        // System.out.println(stringBuffer.toString());
         return stringBuffer.toString();
     }
+
+
+    public static String getBarcode(String barcode){
+
+
+
+        return "";
+    }
+
+
+
 
     public static String resultOfPLC(byte[] plc){
         if (plc == null){
