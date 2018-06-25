@@ -6,6 +6,7 @@ import java.io.Serializable;
 import static javax.persistence.GenerationType.IDENTITY;
 
 /**
+ * 自动补码
  * Created by Vincent on 2018-06-19.
  */
 @Entity
@@ -19,7 +20,7 @@ public class Complement implements Serializable{
     /**
      * 数据包
      */
-    private Integer dataPacket;
+    private String dataPacket;
 
     /**
      * 数据包总长度
@@ -39,17 +40,17 @@ public class Complement implements Serializable{
     /**
      * 包裹重量整数位
      */
-    private Integer packageInt;
+    private String packageInt;
 
     /**
      * 包裹重量小数位
      */
-    private Integer packageDec;
+    private String packageDec;
 
     /**
      * 格口号码
      */
-    private Integer slogan;
+    private String slogan;
 
     /**
      * 备用
@@ -61,6 +62,10 @@ public class Complement implements Serializable{
      */
     private String checkData;
 
+    /**
+     * 状态
+     */
+    private String status;
 
 
     @Id
@@ -100,27 +105,27 @@ public class Complement implements Serializable{
         this.barCode = barCode;
     }
 
-    public Integer getPackageInt() {
+    public String getPackageInt() {
         return packageInt;
     }
 
-    public void setPackageInt(Integer packageInt) {
+    public void setPackageInt(String packageInt) {
         this.packageInt = packageInt;
     }
 
-    public Integer getPackageDec() {
+    public String getPackageDec() {
         return packageDec;
     }
 
-    public void setPackageDec(Integer packageDec) {
+    public void setPackageDec(String packageDec) {
         this.packageDec = packageDec;
     }
 
-    public Integer getSlogan() {
+    public String getSlogan() {
         return slogan;
     }
 
-    public void setSlogan(Integer slogan) {
+    public void setSlogan(String slogan) {
         this.slogan = slogan;
     }
 
@@ -132,11 +137,11 @@ public class Complement implements Serializable{
         this.backup = backup;
     }
 
-    public Integer getDataPacket() {
+    public String getDataPacket() {
         return dataPacket;
     }
 
-    public void setDataPacket(Integer dataPacket) {
+    public void setDataPacket(String dataPacket) {
         this.dataPacket = dataPacket;
     }
 
@@ -147,6 +152,14 @@ public class Complement implements Serializable{
     public void setCheckData(String checkData) {
         this.checkData = checkData;
      }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
 
     public Complement(){

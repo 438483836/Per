@@ -9,4 +9,8 @@ public interface ComplementService {
 
     public int save(Complement complement);
 
+    public int saveSlogan(String barCode, String slogan);
+
+    public Complement getByBarcode(String barCode);
+
 }

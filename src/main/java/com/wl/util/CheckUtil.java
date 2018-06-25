@@ -1,5 +1,8 @@
 package com.wl.util;
 
+import com.wl.entity.Complement;
+import org.springframework.util.StringUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,11 +83,30 @@ public class CheckUtil {
     }
 
 
-    public static String getBarcode(String barcode){
+    public static String getBarcode(Complement complement){
 
+        StringBuffer stringBuffer = new StringBuffer();
 
+        stringBuffer.append("A5A5");
+        stringBuffer.append(complement.getDataPacket());//数据包
+        stringBuffer.append(TypeConversion.getHexString2(Integer.parseInt(complement.getPacketSize())));//数据包总长度
+        stringBuffer.append(complement.getPlcCode());//plc站口
+        stringBuffer.append(complement.getBarCode());//条码
+        stringBuffer.append(complement.getPackageInt());//包裹重量整数位
+        stringBuffer.append(complement.getPackageDec());//包裹重量小数位
+        stringBuffer.append(TypeConversion.getHexString4(Integer.parseInt(complement.getSlogan())));//格口号码
+        if (StringUtils.isEmpty(complement.getSlogan())){
+            stringBuffer.append("5555");
+        }else {
+            stringBuffer.append("AAAA");
+        }
 
-        return "";
+        stringBuffer.append(VerificationUtil.autoComplementV(complement));//校验
+        stringBuffer.append("5A5A");
+
+        System.out.println("返回信息....." + stringBuffer.toString());
+
+        return stringBuffer.toString();
     }
 
 
@@ -112,6 +134,9 @@ public class CheckUtil {
         }
         return "";
     }
+
+
+
 
 
 

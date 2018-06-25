@@ -94,6 +94,12 @@ public class TypeConversion {
         return temp;
     }
 
+    /**
+     * 十六进制两两相加
+     * @param hexString 十六进制字符串
+     * @param index 位数
+     * @return
+     */
     public static String sumHexStringBy2(String hexString,int index){
         int length = hexString.length();
         long result = 0;
@@ -105,5 +111,89 @@ public class TypeConversion {
         String sum = Long.toHexString(result);
         return sum;
     }
+
+
+    /**
+     * 十进制转16进制字符串
+     * @param decimal
+     * @return
+     */
+    public static String decimalToHex(int decimal) {
+        String hex = "";
+        while(decimal != 0) {
+            int hexValue = decimal % 16;
+            hex = toHexChar(hexValue) + hex;
+            decimal = decimal / 16;
+        }
+        return  hex;
+    }
+
+    //将0~15的十进制数转换成0~F的十六进制数
+    public static char toHexChar(int hexValue) {
+        if(hexValue <= 9 && hexValue >= 0)
+            return (char)(hexValue + '0');
+        else
+            return (char)(hexValue - 10 + 'A');
+    }
+
+    /**
+     * 16进制字符串转成10进制数值
+     * @param hex
+     * @return
+     */
+    public static int hexToDecimal(String hex)
+    {
+        int decimalValue=0;
+        for(int i=0;i<hex.length();i++)
+        {
+            char hexChar=hex.charAt(i);
+            decimalValue=decimalValue*16+hexCharToDecimal(hexChar);
+        }
+        return decimalValue;
+    }
+
+    public static int hexCharToDecimal(char hexChar)
+    {
+        if(hexChar>='A'&&hexChar<='F')
+            return 10+hexChar-'A';
+        else
+            return hexChar-'0';//切记不能写成int类型的0，因为字符'0'转换为int时值为48
+    }
+
+    /**
+     * 得到十六进制数的静态方法
+     * @param decimalNumber 十进制数
+     * @return 四位十六进制数字符串
+     */
+    public static String getHexString4(int decimalNumber) {
+        //将十进制数转为十六进制数
+        String hex = Integer.toHexString(decimalNumber);
+        //转为大写
+        hex = hex.toUpperCase();
+        //加长到四位字符，用0补齐
+        while (hex.length() < 4) {
+            hex = "0" + hex;
+        }
+        return hex;
+    }
+
+    /**
+     * 得到十六进制数的静态方法
+     * @param decimalNumber 十进制数
+     * @return 两位十六进制数字符串
+     */
+    public static String getHexString2(int decimalNumber) {
+
+        String  hex = Integer.toHexString(decimalNumber);
+
+        hex = hex.toUpperCase();
+
+        while (hex.length() < 2){
+            hex = "0" + hex;
+        }
+        return hex;
+    }
+
+
 
 }

@@ -177,12 +177,38 @@ public class HexUtil {
         return str;
     }
 
+    /**
+     * unicode的String转换成String的字符串
+     *
+     * @param  hex 16进制值字符串 （一个unicode为2byte）
+     * @return String 全角字符串
+     */
+    public static String unicodeToString(String hex) {
+        int t = hex.length() / 6;
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < t; i++) {
+            String s = hex.substring(i * 6, (i + 1) * 6);
+            // 高位需要补上00再转
+            String s1 = s.substring(2, 4) + "00";
+            // 低位直接转
+            String s2 = s.substring(4);
+            // 将16进制的string转为int
+            int n = Integer.valueOf(s1, 16) + Integer.valueOf(s2, 16);
+            // 将int转换为字符
+            char[] chars = Character.toChars(n);
+            str.append(new String(chars));
+        }
+        return str.toString();
+    }
+
 
 
     public static void main(String[] args) {
-        String srcStr = "1234567890abcdef";
-        String str = stringToHexString(srcStr);
-        System.out.println(str);
+
+        String s = "21";
+        int b = Integer.parseInt(s.replaceAll("^0[x|X]", ""), 16);
+        String a = String.valueOf(b);
+        System.out.println(a);
 
     }
 }

@@ -19,4 +19,12 @@ public class ComplementServiceImpl implements ComplementService{
     public int save(Complement complement) {
         return complementDAO.save(complement);
     }
+
+    public int saveSlogan(String barCode, String slogan) {
+        return complementDAO.saveSlogan(barCode, slogan);
+    }
+
+    public Complement getByBarcode(String barCode) {
+        return complementDAO.getByBarcode(barCode);
+    }
 }

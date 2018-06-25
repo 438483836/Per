@@ -2,9 +2,11 @@ package com.wl.controller;
 
 import com.wl.cache.ExpressCache;
 import com.wl.entity.Complement;
+import com.wl.entity.DeskInformation;
 import com.wl.entity.Express;
 import com.wl.entity.User;
 import com.wl.service.ComplementService;
+import com.wl.service.DeskInformationService;
 import com.wl.service.ExpressService;
 import com.wl.service.UserService;
 import com.wl.socket.client.ClientSendMsg;
@@ -34,6 +36,8 @@ public class MainController {
     private ExpressService expressService;
     @Autowired
     private ComplementService complementService;
+    @Autowired
+    private DeskInformationService deskInformationService;
 
     @RequestMapping("")
     public String home() {
@@ -94,7 +98,7 @@ public class MainController {
         writer.write("上件成功");
 
         //expressService.save(new Express("123","231",1));
-Express express = expressService.getByBarCode("123");
+        Express express = expressService.getByBarCode("123");
         System.out.println("===>"+express.getHex());
         expressService.saveWeight("123",2);
 
@@ -199,19 +203,41 @@ Express express = expressService.getByBarCode("123");
 
         String barCode = request.getParameter("barcode");
 
+
         response.setHeader("Content-type","text/html;charset=UTF-8");
 
-        Express express = expressService.getByBarCode(barCode);
+        Complement complement = complementService.getByBarcode(barCode);
 
-        if(express != null){
-
-            PrintWriter pWriter = response.getWriter();
-            pWriter.write(express.getBarCode());
-            pWriter.write(express.getConsigneeName());
-            pWriter.write(express.getConsigneeAddress());
-            response.setStatus(200);
-
+        if (complement.getSlogan() == null){
+            PrintWriter writer = response.getWriter();
+            writer.write(complement.getBarCode());
+            writer.write("格口号为空，请添加格口号！！！");
         }else {
+
+            PrintWriter writer = response.getWriter();
+            writer.write(complement.getBarCode());
+            writer.write(complement.getSlogan());
+        }
+
+
+    }
+
+    @RequestMapping(value = "/upSlogan", method = RequestMethod.GET)
+    public void upSlogan(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        String barCode =request.getParameter("barcode");
+        String slogan = request.getParameter("slogan");
+
+        response.setHeader("Content-type","text/html;charset=UTF-8");
+
+        int comp = complementService.saveSlogan(barCode,slogan);
+
+        if (comp > 0){
+            response.setStatus(200);
+            PrintWriter writer = response.getWriter();
+            writer.write(barCode);
+            writer.write(slogan);
+        }else {
+
             response.setStatus(500);
         }
 
@@ -231,13 +257,13 @@ Express express = expressService.getByBarCode("123");
 
 
         Complement c = new Complement();
-        c.setDataPacket(Integer.parseInt(packet));
+        c.setDataPacket(packet);
         c.setPacketSize(packetSize);
         c.setPlcCode(plcCode);
         c.setBarCode(barCode);
-        c.setPackageInt(Integer.parseInt(packageInt));
-        c.setPackageDec(Integer.parseInt(packageDec));
-        c.setSlogan(Integer.parseInt(slogan));
+        c.setPackageInt(packageInt);
+        c.setPackageDec(packageDec);
+        c.setSlogan(slogan);
         c.setBackup(backup);
         c.setCheckData(check);
 
@@ -251,6 +277,28 @@ Express express = expressService.getByBarCode("123");
         }
 
 
+    }
+
+    @RequestMapping(value = "/searchDeskMess", method = RequestMethod.GET)
+    public void searchDeskMess(HttpServletRequest request, HttpServletResponse response) throws IOException{
+
+        String barCode = request.getParameter("barcode");
+
+        response.setHeader("Content-type","text/html;charset=UTF-8");
+
+        DeskInformation deskInformation = deskInformationService.getByBarcode(barCode);
+
+        if (deskInformation != null){
+
+            PrintWriter writer = response.getWriter();
+            writer.write("条码："+deskInformation.getBarcode());
+            writer.write("格口号: "+deskInformation.getSlogan());
+            response.setStatus(200);
+
+        }else {
+            PrintWriter writer = response.getWriter();
+            writer.write("该条码不存在！！！");
+        }
     }
 
 

@@ -43,33 +43,20 @@
 </br>
 <h3>查询数据</h3>
 <div>
-    <span>条码</span>
+    <span>条码: </span>
     <input type="text" name="barcode" id="barcode2" value="">
     <input type="button" name="search" id="search" value="查询" onclick="search()">
+    <span>格口号: </span>
+    <input type="text" name="slogan" id="slogan2" value="">
+    <input type="button" name="upSlogan" id="upSlogan" value="添加格口号" onclick="saveSlogan()">
 </div>
 
 </br>
-<h3>保存数据</h3>
+<h3>自动查询数据</h3>
 <div>
-    <span>数据包:</span>
-    <input type="text" name="dataPacket" id="dataPacket" value="">
-    <span>数据包总长度:</span>
-    <input type="text" name="packetSize" id="packetSize" value="">
-    <span>plc站口:</span>
-    <input type="text" name="plcCode" id="plcCode" value=""></br>
-    <span>条码:</span>
-    <input type="text" name="barCode" id="barCode3" value="">
-    <span>包裹重量整数位:</span>
-    <input type="text" name="packageInt" id="packageInt" value="">
-    <span>包裹重量小数位:</span>
-    <input type="text" name="packageDec" id="packageDec" value=""></br>
-    <span>格口号码:</span>
-    <input type="text" name="slogan" id="slogan" value="">
-    <span>备用:</span>
-    <input type="text" name="backup" id="backup" value="">
-    <span>校验:</span>
-    <input type="text" name="checkData" id="checkData" value="">
-    <input type="button" name="save" id="save" value="保存" onclick="saveData()">
+    <span>条码: </span>
+    <input type="text" name="barcode" id="barcode3" value="" onkeydown="searchDeskMess()">
+
 </div>
 
 </body>

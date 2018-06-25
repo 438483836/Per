@@ -3,6 +3,8 @@ package com.wl.socket.client;
 import com.wl.entity.Complement;
 import com.wl.service.ComplementService;
 import com.wl.util.ByteUtil;
+import com.wl.util.CheckUtil;
+import com.wl.util.TypeConversion;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -54,13 +56,14 @@ public class GetAutoComplement {
                     if (readNum > 0){
 
                         while ((readNum = dataInputStream.read(buf)) > 0){
-                            System.out.println("接受======>>");
 
                             String plcData = ByteUtil.toHexString1(buf);
 
+                            System.out.println("接受======>>" + plcData);
+
                             String dataPacket = plcData.substring(4,6);
 
-                            String packetSize = plcData.substring(6,8);
+                            String packetSize = plcData.substring(6,8).toUpperCase();
 
                             String plcCode = plcData.substring(8,10);
 
@@ -70,7 +73,7 @@ public class GetAutoComplement {
 
                             String packageDec = plcData.substring(46,50);
 
-                            String slogan = plcData.substring(50,54);
+                            String slogan = plcData.substring(50,54).toUpperCase();
 
                             String backup = plcData.substring(54,58);
 
@@ -78,37 +81,48 @@ public class GetAutoComplement {
 
 
                             Complement complement = new Complement();
-                            complement.setDataPacket(Integer.parseInt(dataPacket));
-                            complement.setPacketSize(packetSize);
+                            complement.setDataPacket(dataPacket);
+                            complement.setPacketSize(String.valueOf(TypeConversion.hexToDecimal(packetSize)));
                             complement.setPlcCode(plcCode);
                             complement.setBarCode(barCode);
-                            complement.setPackageInt(Integer.parseInt(packageInt));
-                            complement.setPackageDec(Integer.parseInt(packageDec));
-                            complement.setSlogan(Integer.parseInt(slogan.replaceAll("^0[x|X]", ""),16));
+                            complement.setPackageInt(packageInt);
+                            complement.setPackageDec(packageDec);
+                            complement.setSlogan(String.valueOf(TypeConversion.hexToDecimal(slogan)));
                             complement.setBackup(backup);
                             complement.setCheckData(checkData);
 
-                            int comp = complementService.save(complement);
+                            Complement complement2 = complementService.getByBarcode(barCode);
 
-                            if (comp > 0){
+                            if (complement2 != null){
 
-                                System.out.println("保存数据成功！！！");
-                            }
+                                System.out.println("该条码数据库已存在！！！！！");
 
-
-                            System.out.println("plcData======" + plcData);
-
-                            if (plcData.length() > 0){
-                                System.out.println("返回信息");
                                 dataOutputStream = new DataOutputStream(s.getOutputStream());
-                                initMsg();
-                                while (true) {
-                                    dataOutputStream.write(bytes);
+
+                                while (true){
+                                    dataOutputStream.write(ByteUtil.hexStr2ByteArray(CheckUtil.getBarcode(complement2)));
+                                    break;
+                                }
+
+                            }else {
+                                int comp = complementService.save(complement);
+                                if (comp > 0){
+
+                                    System.out.println("保存数据成功！！！");
+                                }
+
+                                if (plcData.length() > 0){
+                                    dataOutputStream = new DataOutputStream(s.getOutputStream());
+                                    Complement complement1 = complementService.getByBarcode(barCode);
+
+                                    while (true){
+                                        dataOutputStream.write(ByteUtil.hexStr2ByteArray(CheckUtil.getBarcode(complement1)));
+                                        break;
+                                    }
+
                                 }
 
                             }
-
-
 
                         }
                     }
@@ -126,6 +140,7 @@ public class GetAutoComplement {
         }
 
     }
+
 
     //初始化数据
     private static void initMsg() {

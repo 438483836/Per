@@ -78,6 +78,23 @@ var search = function () {
     });
 }
 
+var saveSlogan = function () {
+    var bar = document.getElementById("barcode2").value;
+    var slogan = document.getElementById("slogan2").value;
+    console.log(bar+"--"+slogan);
+    $.ajax({
+       url: base_url + "/upSlogan",
+       cache: false,
+       data: {barcode: bar, slogan: slogan},
+       success: function (data) {
+           noticeBox("添加格口号成功=====>>" + data);
+       },
+       error: function () {
+           errorBox("添加格口号失败");
+       } 
+    });
+}
+
 var saveData = function () {
 
     var dataPacket = document.getElementById("dataPacket").value;
@@ -104,6 +121,30 @@ var saveData = function () {
 
     });
 
+    
+}
+
+var searchDeskMess = function () {
+    
+    var barcode = document.getElementById("barcode3").value;
+
+    if(event.keyCode == 13){
+
+        console.log(barcode);
+        $.ajax({
+            url: base_url + "/searchDeskMess",
+            cache: false,
+            data: {barcode: barcode},
+            success: function (data) {
+                noticeBox("查询成功=====>" + data);
+            },
+            error: function () {
+                errorBox("查询失败! ");
+            }
+
+        });
+    }
+    
     
 }
 
