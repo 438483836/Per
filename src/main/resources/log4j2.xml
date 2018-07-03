@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration>
+	<Properties>
+		<!-- 日记记录的目录 -->
+		<Property name="logFileDir">E://personal//log//</Property>
+	</Properties>
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout charset="UTF-8" pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%t][%-5p][%F:%L] - [%m]%n" />
+		</Console>
+		<RollingFile name="detailFile" fileName="${logFileDir}personal.log" filePattern="${logFileDir}personal.%d{yyyy-MM-dd-HH-mm-ss}.log">
+			<PatternLayout charset="UTF-8" pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%t][%-5p][%F:%L] - [%m]%n" />
+			<Policies>
+				<!-- 按大小分割 size为大小间隔-->
+		    	<SizeBasedTriggeringPolicy size="80 MB" />
+		        <OnStartupTriggeringPolicy />
+		    </Policies>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<logger name="com.wl.DAO" level="INFO"/>
+		<logger name="org.hibernate">
+			<level value="info" />
+		</logger>
+		<logger name="org.hibernate.sql">
+			<level value="DEBUG" />
+		</logger>
+		<logger name="org.hibernate.jdbc">
+			<level value="DEBUG" />
+		</logger>
+		<!-- 打印SQL语句 -->
+		<logger name="org.hibernate.tool.hbm2ddl.">
+			<level value="DEBUG" />
+		</logger>
+		<Root level="DEBUG">
+			<Appender-ref ref="console"/>
+			<Appender-ref ref="detailFile"/>
+		</Root>
+	</Loggers>
+</Configuration >
