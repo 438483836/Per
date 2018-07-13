@@ -9,4 +9,6 @@ public interface DeskInformationService {
 
     public DeskInformation getByBarcode(String barcode);
 
+    public int save(DeskInformation deskInformation);
+
 }

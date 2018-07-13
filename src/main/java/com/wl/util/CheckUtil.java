@@ -1,6 +1,7 @@
 package com.wl.util;
 
 import com.wl.entity.Complement;
+import com.wl.entity.DeskInformation;
 import org.springframework.util.StringUtils;
 
 import java.util.regex.Matcher;
@@ -82,7 +83,11 @@ public class CheckUtil {
         return stringBuffer.toString();
     }
 
-
+    /**
+     * 自动补码
+     * @param complement
+     * @return
+     */
     public static String getBarcode(Complement complement){
 
         StringBuffer stringBuffer = new StringBuffer();
@@ -105,6 +110,46 @@ public class CheckUtil {
         stringBuffer.append("5A5A");
 
         System.out.println("返回信息....." + stringBuffer.toString());
+
+        return stringBuffer.toString();
+    }
+
+    /**
+     * 自动扫描上件台
+     * @param deskInformation
+     * @return
+     */
+    public static String getScanCode(DeskInformation deskInformation){
+
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("A5A5");
+        stringBuffer.append(deskInformation.getDataPacket());//数据包
+        stringBuffer.append(deskInformation.getPacketSize());//数据包总长度
+        stringBuffer.append(TypeConversion.getHexString2(Integer.parseInt(deskInformation.getPcNum())));//上位机编号
+        String barcode = TypeConversion.string2HexString(deskInformation.getBarcode());
+
+        if (barcode.length() < 32){
+            int i =0;
+            int j = 32 - barcode.length();
+            String val = String.valueOf(j);
+            String str = String.format("%0"+ val+"d",i);
+            String newBarcode = barcode + str;
+            stringBuffer.append(newBarcode);
+
+        }else{
+
+            stringBuffer.append(barcode);
+            stringBuffer.append(TypeConversion.getHexString4(Integer.parseInt(deskInformation.getSlogan())));
+            stringBuffer.append(deskInformation.getImportantMess());
+            stringBuffer.append(deskInformation.getCheckData());
+            stringBuffer.append("5A5A");
+            return stringBuffer.toString();
+
+        }
+        stringBuffer.append(TypeConversion.getHexString4(Integer.parseInt(deskInformation.getSlogan())));
+        stringBuffer.append(deskInformation.getImportantMess());
+        stringBuffer.append(deskInformation.getCheckData());
+        stringBuffer.append("5A5A");
 
         return stringBuffer.toString();
     }

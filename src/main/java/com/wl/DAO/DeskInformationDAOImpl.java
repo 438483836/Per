@@ -25,4 +25,10 @@ public class DeskInformationDAOImpl implements DeskInformationDAO{
 
         return (DeskInformation)query.uniqueResult();
     }
+
+    public int save(DeskInformation deskInformation) {
+
+        return (Integer) sessionFactory.getCurrentSession().save(deskInformation);
+
+    }
 }

@@ -13,10 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class DeskInformationServiceImpl implements DeskInformationService{
 
+
     @Autowired
     private DeskInformationDAO deskInformationDAO;
 
     public DeskInformation getByBarcode(String barcode) {
         return deskInformationDAO.getByBarcode(barcode);
+    }
+
+    public int save(DeskInformation deskInformation) {
+        return deskInformationDAO.save(deskInformation);
     }
 }

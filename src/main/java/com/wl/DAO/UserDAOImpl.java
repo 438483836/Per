@@ -1,6 +1,8 @@
 package com.wl.DAO;
 
 import com.wl.entity.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -12,6 +14,7 @@ import java.util.List;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
+
 
     @Autowired
     private SessionFactory sessionFactory;

@@ -148,6 +148,33 @@ var searchDeskMess = function () {
     
 }
 
+var paInformationUp =  function () {
+    
+    var sortPortCode = document.getElementById("sortPortCode").value;
+    var packageCode = document.getElementById("packageCode").value;
+    var bindingTime = document.getElementById("bindingTime").value;
+    var employeeCode = document.getElementById("employeeCode").value;
+    var employeeName = document.getElementById("employeeName").value;
+    var siteName = document.getElementById("siteName").value;
+    var uploadTime = document.getElementById("uploadTime").value;
+    var lineCode = document.getElementById("lineCode").value;
+    
+    console.log(sortPortCode+"---"+packageCode+"---"+bindingTime+"---"+employeeCode+"---"+employeeName+"---"+siteName+"---"+uploadTime+"---"+lineCode);
+    $.ajax({
+        url: base_url+"/upInformation",
+        cache: false,
+        data: {sortPortCode: sortPortCode, packageCode:packageCode, bindingTime:bindingTime, employeeCode:employeeCode, employeeName:employeeName, siteName:siteName,uploadTime:uploadTime, lineCode:lineCode},
+        success: function (data) {
+            noticeBox("查询成功=====>" + data);
+        },
+        error: function () {
+            errorBox("查询失败! ");
+        }
+    });
+    
+}
+
+
 
 
 var noticeBox = function (msg) {

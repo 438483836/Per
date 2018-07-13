@@ -8,4 +8,6 @@ import com.wl.entity.DeskInformation;
 public interface DeskInformationDAO {
 
     public DeskInformation getByBarcode(String barcode);
+
+    public int save(DeskInformation deskInformation);
 }

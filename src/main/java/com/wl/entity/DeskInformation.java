@@ -6,7 +6,7 @@ import java.io.Serializable;
 import static javax.persistence.GenerationType.IDENTITY;
 
 /**
- * 上件台
+ * 扫码信息发送给PLC
  * Created by Vincent on 2018-06-25.
  */
 @Entity
@@ -52,6 +52,11 @@ public class DeskInformation implements Serializable {
      * 校验
      */
     private String checkData;
+
+    /**
+     * 三段码
+     */
+    private String threeCode;
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -118,6 +123,14 @@ public class DeskInformation implements Serializable {
 
     public void setCheckData(String checkData) {
         this.checkData = checkData;
+    }
+
+    public String getThreeCode() {
+        return threeCode;
+    }
+
+    public void setThreeCode(String threeCode) {
+        this.threeCode = threeCode;
     }
 
     public DeskInformation() {

@@ -12,17 +12,23 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.util.EntityUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Vincent on 2018-07-03.
  */
 public class HttpHelper {
 
-    public static JSONObject httpGet(String url) throws OApiException{
+    private static Logger logger = LogManager.getLogger(HttpHelper.class);
+
+    public static JSONObject httpGet(String url) throws OApiException,UnsupportedEncodingException{
 
         HttpGet httpGet = new HttpGet(url);
+        logger.info("Executing request " + httpGet.getRequestLine());
         CloseableHttpResponse response = null;
         CloseableHttpClient httpClient = HttpClients.createDefault();
         RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(2000).setConnectTimeout(2000).build();
@@ -33,7 +39,7 @@ public class HttpHelper {
 
             if (response.getStatusLine().getStatusCode() != 200){
 
-                System.out.println("request url failed, http code=" + response.getStatusLine().getStatusCode()
+                logger.info("request url failed, http code=" + response.getStatusLine().getStatusCode()
                         + ", url=" + url);
                 return null;
             }
@@ -43,11 +49,12 @@ public class HttpHelper {
 
                 JSONObject result = JSON.parseObject(resultStr);
                 //根据实际情况，可以修改返回状态
-                if (result.getString("status") == "SUCCESS"){
-                    return  result;
+                if (result.getString("status").equals("SUCCESS")){
+                    logger.info("返回数据成功====>>"+result);
+                    return result;
                 }else {
-                    System.out.println("request url=" + url + ",return value=");
-                    System.out.println(resultStr);
+                    logger.error("request url=" + url + ",return value=");
+                    logger.error(resultStr);
                     String errCode = result.getString("status");
                     String errMsg = result.getString("errmsg");
                     throw new OApiException(errCode, errMsg);
@@ -55,7 +62,7 @@ public class HttpHelper {
             }
 
         } catch (IOException e) {
-            System.out.println("request url=" + url + ", exception, msg=" + e.getMessage());
+            logger.error("request url=" + url + ", exception, msg=" + e.getMessage());
             e.printStackTrace();
         } finally {
             if (response != null) try {
@@ -85,7 +92,7 @@ public class HttpHelper {
 
             if (response.getStatusLine().getStatusCode() != 200) {
 
-                System.out.println("request url failed, http code=" + response.getStatusLine().getStatusCode()
+                logger.info("request url failed, http code=" + response.getStatusLine().getStatusCode()
                         + ", url=" + url);
                 return null;
             }
@@ -99,15 +106,15 @@ public class HttpHelper {
                     result.remove("errmsg");
                     return result;
                 } else {
-                    System.out.println("request url=" + url + ",return value=");
-                    System.out.println(resultStr);
+                    logger.error("request url=" + url + ",return value=");
+                    logger.error(resultStr);
                     String errCode = result.getString("errcode");
                     String errMsg = result.getString("errmsg");
                     throw new OApiException(errCode, errMsg);
                 }
             }
         } catch (IOException e) {
-            System.out.println("request url=" + url + ", exception, msg=" + e.getMessage());
+            logger.error("request url=" + url + ", exception, msg=" + e.getMessage());
             e.printStackTrace();
         } finally {
             if (response != null) try {

@@ -1,10 +1,7 @@
 package com.wl.controller;
 
 import com.wl.cache.ExpressCache;
-import com.wl.entity.Complement;
-import com.wl.entity.DeskInformation;
-import com.wl.entity.Express;
-import com.wl.entity.User;
+import com.wl.entity.*;
 import com.wl.service.ComplementService;
 import com.wl.service.DeskInformationService;
 import com.wl.service.ExpressService;
@@ -12,11 +9,18 @@ import com.wl.service.UserService;
 import com.wl.socket.client.ClientSendMsg;
 import com.wl.socket.client.PackGetMsg;
 import com.wl.socket.client.PackSendMsg;
+import com.wl.socket.client.ScanCodeSendStation;
+import com.wl.util.DateConversion;
+import com.wl.util.JSONUtils;
+import com.wl.ztService.ZTHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +34,8 @@ import java.util.List;
 @RequestMapping("/")
 public class MainController {
 
+    private static Logger logger = LogManager.getLogger(MainController.class);
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -38,6 +44,7 @@ public class MainController {
     private ComplementService complementService;
     @Autowired
     private DeskInformationService deskInformationService;
+
 
     @RequestMapping("")
     public String home() {
@@ -62,6 +69,7 @@ public class MainController {
             response.setStatus(200);
             PrintWriter writer = response.getWriter();
             writer.write(user.getRole());
+            logger.info("登录名：" + user.getUsername());
         } else {
             response.setStatus(500);
         }
@@ -279,6 +287,12 @@ public class MainController {
 
     }
 
+    /**
+     * 自动扫描上件台
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     @RequestMapping(value = "/searchDeskMess", method = RequestMethod.GET)
     public void searchDeskMess(HttpServletRequest request, HttpServletResponse response) throws IOException{
 
@@ -290,6 +304,9 @@ public class MainController {
 
         if (deskInformation != null){
 
+            ScanCodeSendStation.scanCodeSendPLC(deskInformation);
+            logger.info("发送成功！！！");
+
             PrintWriter writer = response.getWriter();
             writer.write("条码："+deskInformation.getBarcode());
             writer.write("格口号: "+deskInformation.getSlogan());
@@ -299,6 +316,69 @@ public class MainController {
             PrintWriter writer = response.getWriter();
             writer.write("该条码不存在！！！");
         }
+    }
+
+
+    @RequestMapping(value = "/upInformation",method = RequestMethod.GET)
+    @ResponseBody
+    public Object upInformation(HttpServletRequest request, HttpServletResponse response)  throws IOException{
+        String sortPortCode = request.getParameter("sortPortCode");
+        String packageCode =request.getParameter("packageCode");
+        String bindingTime = request.getParameter("bindingTime");
+        String employeeCode = request.getParameter("employeeCode");
+        String employeeName = request.getParameter("employeeName");
+        String siteName = request.getParameter("siteName");
+        String uploadTime =  request.getParameter("uploadTime");
+        String lineCode = request.getParameter("lineCode");
+
+        ZtoPaMessUpload ztoPaMessUpload = new ZtoPaMessUpload();
+        ztoPaMessUpload.setSortPortCode(sortPortCode);
+        ztoPaMessUpload.setPackageCode(packageCode);
+        ztoPaMessUpload.setBindingTime(DateConversion.getCurrentDate(bindingTime,"yyyy-MM-dd HH:mm:ss"));
+        ztoPaMessUpload.setEmployeeCode(employeeCode);
+        ztoPaMessUpload.setEmployeeName(employeeName);
+        ztoPaMessUpload.setSiteName(siteName);
+        ztoPaMessUpload.setUploadTime(DateConversion.getCurrentDate(uploadTime,"yyyy-MM-dd HH:mm:ss"));
+        ztoPaMessUpload.setLineCode(lineCode);
+
+        ZtoResponseTO ztoResponseTO = ZTHelper.paMessUpload(ztoPaMessUpload);
+
+        if (ztoResponseTO != null){
+            logger.info("保存数据成功！！！");
+            response.setStatus(200);
+            return ztoResponseTO.toString();
+        }
+
+
+        return null;
+
+    }
+
+    @RequestMapping(value = "/sortService",method = RequestMethod.GET)
+    @ResponseBody
+    public Object sortService(@RequestParam(value = "data",required = true) Object data, @RequestParam(value = "data_digest",required = true) String data_digest, @RequestParam(value = "msg_type",required = true) String msg_type, @RequestParam(value = "company_id",required = true) String company_id) throws IOException{
+
+       if (data != null &&msg_type.equals("SORTING_BAG_BIND")){
+           logger.info("调用接口成功！！！");
+           String status = "SUCCESS";
+           String packageCode = "01";
+           String sortMode = "test";
+           String destSiteCode = "01";
+           String destSiteName ="test";
+           String remark = "";
+           ZtoResponseTO ztoResponseTO = new ZtoResponseTO();
+           ztoResponseTO.setStatus(status);
+           ztoResponseTO.setPackageCode(packageCode);
+           ztoResponseTO.setSortMode(sortMode);
+           ztoResponseTO.setDestSiteCode(destSiteCode);
+           ztoResponseTO.setDestSiteName(destSiteName);
+           ztoResponseTO.setRemark(remark);
+           String jsonObj = JSONUtils.toString(ztoResponseTO);
+           logger.info("打印接收数据=====>" + jsonObj);
+           return jsonObj;
+
+       }
+        return null;
     }
 
 
