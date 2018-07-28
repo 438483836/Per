@@ -1,17 +1,13 @@
 package com.wl.controller;
 
+import com.wl.Env;
 import com.wl.cache.ExpressCache;
 import com.wl.entity.*;
-import com.wl.service.ComplementService;
-import com.wl.service.DeskInformationService;
-import com.wl.service.ExpressService;
-import com.wl.service.UserService;
+import com.wl.service.*;
 import com.wl.socket.client.ClientSendMsg;
-import com.wl.socket.client.PackGetMsg;
 import com.wl.socket.client.PackSendMsg;
 import com.wl.socket.client.ScanCodeSendStation;
 import com.wl.util.DateConversion;
-import com.wl.util.JSONUtils;
 import com.wl.ztService.ZTHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,12 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.*;
 
 
 @Controller
@@ -44,6 +42,8 @@ public class MainController {
     private ComplementService complementService;
     @Autowired
     private DeskInformationService deskInformationService;
+    @Autowired
+    private ZtoBackInformationService ztoBackInformationService;
 
 
     @RequestMapping("")
@@ -195,16 +195,17 @@ public class MainController {
         try {
             Integer i = Integer.valueOf(export);
             PackSendMsg.setBytes(i, status.equals("1"));
-            byte[] b = PackGetMsg.buf;
+            //byte[] b = PackGetMsg.buf;
 
             //Integer c1 = Integer.parseInt(b[29]+"",16);
-            Integer c = Integer.parseInt(b[29+i*2]+""+b[30+i*2],16);
-            writer.write(c+"");
+            //Integer c = Integer.parseInt(b[29+i*2]+""+b[30+i*2],16);
+            //writer.write(c+"");
         } catch (Exception e) {
             writer.write("失败");
         }
 
     }
+
 
     @RequestMapping(value = "/search",method = RequestMethod.GET)
     public void search(HttpServletRequest request, HttpServletResponse response)throws IOException{
@@ -318,9 +319,8 @@ public class MainController {
         }
     }
 
-
-    @RequestMapping(value = "/upInformation",method = RequestMethod.GET)
     @ResponseBody
+    @RequestMapping(value = "/upInformation",method = RequestMethod.GET)
     public Object upInformation(HttpServletRequest request, HttpServletResponse response)  throws IOException{
         String sortPortCode = request.getParameter("sortPortCode");
         String packageCode =request.getParameter("packageCode");
@@ -343,23 +343,23 @@ public class MainController {
 
         ZtoResponseTO ztoResponseTO = ZTHelper.paMessUpload(ztoPaMessUpload);
 
-        if (ztoResponseTO != null){
+        int data = ztoBackInformationService.save(ztoResponseTO);
+
+        if (data > 0){
             logger.info("保存数据成功！！！");
             response.setStatus(200);
             return ztoResponseTO.toString();
         }
 
-
         return null;
 
     }
 
-    @RequestMapping(value = "/sortService",method = RequestMethod.GET)
     @ResponseBody
+    @RequestMapping(value = "/sortService",method = RequestMethod.GET)
     public Object sortService(@RequestParam(value = "data",required = true) Object data, @RequestParam(value = "data_digest",required = true) String data_digest, @RequestParam(value = "msg_type",required = true) String msg_type, @RequestParam(value = "company_id",required = true) String company_id) throws IOException{
 
        if (data != null &&msg_type.equals("SORTING_BAG_BIND")){
-           logger.info("调用接口成功！！！");
            String status = "SUCCESS";
            String packageCode = "01";
            String sortMode = "test";
@@ -373,14 +373,41 @@ public class MainController {
            ztoResponseTO.setDestSiteCode(destSiteCode);
            ztoResponseTO.setDestSiteName(destSiteName);
            ztoResponseTO.setRemark(remark);
-           String jsonObj = JSONUtils.toString(ztoResponseTO);
-           logger.info("打印接收数据=====>" + jsonObj);
-           return jsonObj;
+           //String jsonObj = JSONUtils.toString(ztoResponseTO);
+           //logger.info("打印接收数据=====>" + jsonObj);
+           return ztoResponseTO;
 
        }
         return null;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/saveProduct",method = RequestMethod.POST)
+    public Object saveProduct(@RequestParam(value = "uploadFile",required = false)MultipartFile file){
+        String fileName = file.getOriginalFilename();
+        logger.info("文件名字: {}",fileName);
+        Map<String, Object> result = new HashMap<String, Object>();
+        String transmissionPath = Env.addImg;
+        String dir = DateConversion.getDateFormatter(new Date(), "yyyy-MM-dd");
+        String newFileName = UUID.randomUUID().toString().replaceAll("-", "")+".jpg";
+        File targetFile = new File(transmissionPath + File.separator +dir, newFileName);
+        if (!targetFile.exists()){
+            targetFile.mkdirs();
+        }
+        try {
+            file.transferTo(targetFile);
+            result.put("code", "0000");
+            result.put("codeDesc", "文件上传成功");
+            result.put("data", Env.imgUrl+File.separator+dir+File.separator+newFileName);
+        } catch (IOException e) {
+            logger.error("文件上传报错了");
+            logger.error(e.getMessage());
+            result.put("code", "0001");
+            result.put("codeDesc", "文件上传失败");
+        }
+        logger.info("显示上传信息：{}" ,result);
+        return result;
+    }
 
 }
 

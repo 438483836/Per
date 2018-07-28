@@ -49,7 +49,7 @@ public class SendAutoComplement {
                 }
             });
 
-            threadSendData.start();
+            //threadSendData.start();
 
 
         } catch (IOException e) {

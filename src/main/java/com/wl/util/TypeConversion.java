@@ -194,6 +194,38 @@ public class TypeConversion {
         return hex;
     }
 
+    /**
+     * 得到十六进制数的静态方法
+     * @param decimalNumber 十进制数
+     * @param i
+     * @return
+     */
+    public static String getHexStringI(int decimalNumber,int i){
+        String  hex = Integer.toHexString(decimalNumber);
 
+        hex = hex.toUpperCase();
+
+        while (hex.length() < i){
+            hex = "0" + hex;
+        }
+        return hex;
+    }
+
+    /**
+     * 向右补零
+     * @param barcode
+     * @return
+     */
+    public static String rightToZero(String barcode){
+        if (barcode.length() < 32){
+            int i =0;
+            int j = 32 - barcode.length();
+            String val = String.valueOf(j);
+            String str = String.format("%0"+ val+"d",i);
+            String newBarcode = barcode + str;
+            return newBarcode;
+        }
+        return null;
+    }
 
 }

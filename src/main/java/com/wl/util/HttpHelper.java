@@ -39,6 +39,7 @@ public class HttpHelper {
 
             if (response.getStatusLine().getStatusCode() != 200){
 
+
                 logger.info("request url failed, http code=" + response.getStatusLine().getStatusCode()
                         + ", url=" + url);
                 return null;
@@ -50,7 +51,7 @@ public class HttpHelper {
                 JSONObject result = JSON.parseObject(resultStr);
                 //根据实际情况，可以修改返回状态
                 if (result.getString("status").equals("SUCCESS")){
-                    logger.info("返回数据成功====>>"+result);
+                    logger.info("接收数据成功====>>"+result);
                     return result;
                 }else {
                     logger.error("request url=" + url + ",return value=");

@@ -1,15 +1,20 @@
 package com.wl.util;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.util.StringUtils;
 
 /**
- * @author jianghc
+ * @author Vincent
  * @create 2017-04-29 11:51
  **/
 public class ByteUtil {
+
+    private static Logger logger = LogManager.getLogger(ByteUtil.class);
+
     public static byte[] hexStr2ByteArray(String hexString) {
         if (StringUtils.isEmpty(hexString))
-            throw new IllegalArgumentException("this hexString must not be empty");
+            logger.error("this hexString must not be empty");
 
         hexString = hexString.toLowerCase();
         final byte[] byteArray = new byte[hexString.length() / 2];
@@ -43,5 +48,28 @@ public class ByteUtil {
         } else {
             return s;
         }
+    }
+
+    /**
+     * 从一个byte[]数组中截取一部分
+     * @param src
+     * @param begin
+     * @param count
+     * @return
+     */
+    public static byte[] subBytes(byte[] src, int begin, int count) {
+        byte[] bs = new byte[count];
+        for (int i=begin;i<begin+count; i++) bs[i-begin] = src[i];
+        return bs;
+    }
+
+    /**
+     * //将data字节型数据转换为0~255 (0xFF 即BYTE)
+     * @param data
+     * @return
+     */
+    public static int getUnsignedByte (byte data){
+
+        return data&0x0FF;
     }
 }

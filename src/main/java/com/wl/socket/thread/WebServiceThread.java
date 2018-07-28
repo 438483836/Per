@@ -32,7 +32,7 @@ public class WebServiceThread {
                     }
                     Object obj =WebServiceUtil.getWebMess();
                     if (obj != null){
-                        logger.info("接受数据成功" + obj);
+                        logger.info("接收数据成功:{}" , obj);
                         break;
                     }
                 }

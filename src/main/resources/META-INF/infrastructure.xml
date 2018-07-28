@@ -50,6 +50,7 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
+    <bean id="autoPackBackMessThread" class="com.wl.socket.thread.AutoPackBackMessThread"></bean>
     <bean id="deskThread" class="com.wl.socket.thread.DeskThread"></bean>
     <bean id="getAutoComplementThread" class="com.wl.socket.thread.GetAutoComplementThread"></bean>
     <bean id="webServiceThread" class="com.wl.socket.thread.WebServiceThread"></bean>

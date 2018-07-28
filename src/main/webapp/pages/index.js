@@ -40,9 +40,10 @@ var up = function () {
     });
 }
 
+
 var pack = function ( e,s) {
-    //var e = document.getElementById("export").value;
-   // var status = document.getElementById("status").value;
+    var e = document.getElementById("export").value;
+    var status = document.getElementById("status").value;
     $.ajax({
         url: base_url + "/pack",
         cache: false,

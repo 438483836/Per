@@ -1,6 +1,9 @@
 package com.wl.socket.client;
 
 import com.wl.socket.manage.PackSocketManage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.DataOutputStream;
 import java.net.Socket;
 
@@ -9,6 +12,8 @@ import java.net.Socket;
  * @create 2017-04-15 10:04
  **/
 public class PackSendMsg {
+
+    private static Logger logger = LogManager.getLogger(PackSendMsg.class);
 
     public static boolean[] f = new boolean[48];
 
@@ -29,17 +34,18 @@ public class PackSendMsg {
             //向服务器端发送数据
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             //TODO 获取上件信息
-            initMsg();
+            //initMsg();
 
             while (true) {
                 Thread.sleep(100);
                 out.write(bytes);
             }
         } catch (Exception e) {
-            throw new Exception("客户端连接失败！" + e.getMessage());
+            logger.error("客户端连接失败！{}" , e.getMessage());
         }
     }
 
+/*
 
     //初始化数据
     private static void initMsg() {
@@ -57,6 +63,7 @@ public class PackSendMsg {
         bytes[17] = (byte) 90;//码尾
         bytes[18] = (byte) 90;//码尾
     }
+*/
 
 
     private static void setBt() {

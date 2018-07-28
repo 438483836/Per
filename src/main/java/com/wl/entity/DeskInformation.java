@@ -34,6 +34,11 @@ public class DeskInformation implements Serializable {
     private String pcNum;
 
     /**
+     * 条码长度
+     */
+    private String barcodeLength;
+
+    /**
      *条码
      */
     private String barcode;
@@ -131,6 +136,14 @@ public class DeskInformation implements Serializable {
 
     public void setThreeCode(String threeCode) {
         this.threeCode = threeCode;
+    }
+
+    public String getBarcodeLength() {
+        return barcodeLength;
+    }
+
+    public void setBarcodeLength(String barcodeLength) {
+        this.barcodeLength = barcodeLength;
     }
 
     public DeskInformation() {

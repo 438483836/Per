@@ -1,13 +1,21 @@
 package com.wl.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 /**
+ * 中通返回数据
  * Created by Vincent on 2018-07-04.
  */
+@Entity
+@Table(name = "t_ztoResponseTO")
 public class ZtoResponseTO implements Serializable{
 
     private static final long serialVersionUID = 7590383730773235362L;
+
+    private Integer id;
 
     /**
      * 状态
@@ -33,6 +41,7 @@ public class ZtoResponseTO implements Serializable{
     /**
      * 目的站点名
      */
+
     private String destSiteName;
     /**
      * 备注信息
@@ -40,6 +49,17 @@ public class ZtoResponseTO implements Serializable{
     private String remark;
 
     public ZtoResponseTO() {
+    }
+
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "Id", unique = true, nullable = false)
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getStatus() {

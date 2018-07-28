@@ -4,6 +4,8 @@ import com.wl.service.ExpressService;
 import com.wl.socket.client.PackGetMsg;
 import com.wl.socket.client.PackSendMsg;
 import com.wl.socket.manage.PackSocketManage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +15,9 @@ import javax.annotation.PostConstruct;
  * @create 2017-05-21 08:17
  **/
 public class PackGetThread {
+
+    private static Logger logger = LogManager.getLogger(PackGetThread.class);
+
     @Autowired
     private ExpressService expressService;
 
@@ -63,9 +68,7 @@ public class PackGetThread {
 
             }
         });
-    
-
-
+        //packSend.start();
     }
 
 

@@ -2,53 +2,16 @@ package com.wl.util;
 
 import com.wl.entity.Complement;
 import com.wl.entity.DeskInformation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.util.StringUtils;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Vincent on 2017/4/16.
  */
 public class CheckUtil {
 
-
-
-    public static String checkCode(String barCode){
-        if (null == barCode){
-
-        }else{
-            String code = barCode.substring(barCode.indexOf("A5A5") + 4, barCode.lastIndexOf("5A5A"));
-            //条码截取 转换成16进制String
-            String byteCode =  TypeConversion.string2HexString(code);
-            //16进制String 正则过滤
-            String str = getNumbers(byteCode);
-            System.out.println(str);
-            //两两相加
-            String res = TypeConversion.sumHexStringBy2(str,2);
-            System.out.println(res);
-            return res;
-        }
-        return null;
-    }
-
-
-    public static String getCode(String code){
-        String byteCode = TypeConversion.string2HexString(code);
-       if (byteCode.length() < 30){
-
-        }
-        String str = "A5A5010301"+byteCode+"00000000000000000000002100000000005A5A";
-      //  System.out.println(str);
-        return str;
-    }
-
-
-    public static String  getCodeAndNum(String code,String num){
-        String byteCode = TypeConversion.string2HexString(code);
-        String str = "A5A50103"+num+byteCode+"00000000000000000000002100000000005A5A";
-        return str;
-    }
+    private static Logger logger = LogManager.getLogger(CheckUtil.class);
 
     /**
      *
@@ -93,23 +56,23 @@ public class CheckUtil {
         StringBuffer stringBuffer = new StringBuffer();
 
         stringBuffer.append("A5A5");
-        stringBuffer.append(complement.getDataPacket());//数据包
+        stringBuffer.append("02");//数据包
         stringBuffer.append(TypeConversion.getHexString2(Integer.parseInt(complement.getPacketSize())));//数据包总长度
         stringBuffer.append(complement.getPlcCode());//plc站口
         stringBuffer.append(complement.getBarCode());//条码
         stringBuffer.append(complement.getPackageInt());//包裹重量整数位
         stringBuffer.append(complement.getPackageDec());//包裹重量小数位
-        stringBuffer.append(TypeConversion.getHexString4(Integer.parseInt(complement.getSlogan())));//格口号码
+        stringBuffer.append("00FE");//格口号码
         if (StringUtils.isEmpty(complement.getSlogan())){
             stringBuffer.append("5555");
         }else {
             stringBuffer.append("AAAA");
         }
 
-        stringBuffer.append(VerificationUtil.autoComplementV(complement));//校验
+        stringBuffer.append("0000");//校验
         stringBuffer.append("5A5A");
 
-        System.out.println("返回信息....." + stringBuffer.toString());
+        logger.info("自动补码发送十六进制码: " ,stringBuffer.toString());
 
         return stringBuffer.toString();
     }
@@ -123,76 +86,51 @@ public class CheckUtil {
 
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("A5A5");
-        stringBuffer.append(deskInformation.getDataPacket());//数据包
-        stringBuffer.append(deskInformation.getPacketSize());//数据包总长度
+        stringBuffer.append(TypeConversion.getHexString2(Integer.parseInt(deskInformation.getDataPacket())));//数据包
+        stringBuffer.append("1E");//数据包总长度
         stringBuffer.append(TypeConversion.getHexString2(Integer.parseInt(deskInformation.getPcNum())));//上位机编号
-        String barcode = TypeConversion.string2HexString(deskInformation.getBarcode());
-
-        if (barcode.length() < 32){
+        stringBuffer.append(TypeConversion.getHexString2(deskInformation.getBarcode().length()));//条码长度
+        String modifyBarcode = StringUtil.addStr(deskInformation.getBarcode());//条码
+        if (modifyBarcode.length() < 30){
             int i =0;
-            int j = 32 - barcode.length();
+            int j = 30 - modifyBarcode.length();
             String val = String.valueOf(j);
             String str = String.format("%0"+ val+"d",i);
-            String newBarcode = barcode + str;
+            String newBarcode = modifyBarcode + str;
             stringBuffer.append(newBarcode);
 
         }else{
 
-            stringBuffer.append(barcode);
+            stringBuffer.append(modifyBarcode);
             stringBuffer.append(TypeConversion.getHexString4(Integer.parseInt(deskInformation.getSlogan())));
-            stringBuffer.append(deskInformation.getImportantMess());
-            stringBuffer.append(deskInformation.getCheckData());
+            stringBuffer.append(TypeConversion.getHexStringI(Integer.parseInt(deskInformation.getImportantMess()),6));
+            stringBuffer.append(VerificationUtil.upperPieceV(deskInformation));
             stringBuffer.append("5A5A");
             return stringBuffer.toString();
 
         }
         stringBuffer.append(TypeConversion.getHexString4(Integer.parseInt(deskInformation.getSlogan())));
-        stringBuffer.append(deskInformation.getImportantMess());
-        stringBuffer.append(deskInformation.getCheckData());
+        stringBuffer.append(TypeConversion.getHexStringI(Integer.parseInt(deskInformation.getImportantMess()),6));
+        stringBuffer.append(VerificationUtil.upperPieceV(deskInformation));
         stringBuffer.append("5A5A");
 
         return stringBuffer.toString();
     }
 
+    /**
+     * 自动集包pc发送PLC数据
+     * @param responseData
+     * @param
+     * @return
+     */
+    public static String autoPackSendPLC(String responseData){
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("A5A5");
+        stringBuffer.append("00");
+        stringBuffer.append(responseData);
+        stringBuffer.append("5A5A");
 
-
-
-    public static String resultOfPLC(byte[] plc){
-        if (plc == null){
-
-        }else {
-            String res = new String(plc);
-            String code = res.substring(res.indexOf("A5A5") + 4, res.lastIndexOf("5A5A"));
-           // System.out.println(code);
-            return code;
-        }
-        return null;
-    }
-
-
-
-    public static String getNumbers(String content) {
-        Pattern pattern = Pattern.compile("^[1-9]\\d*$");
-        Matcher matcher = pattern.matcher(content);
-        while (matcher.find()) {
-            return matcher.group(0);
-        }
-        return "";
-    }
-
-
-
-
-
-
-
-    public static void main(String[] args){
-       /* String barCode = "471011111111111";
-        String num ="1";
-        String slogans = "12";
-        getCodeAndNumAndSlogans(barCode,num,slogans);*/
-
-        byte[] b = null;
+        return stringBuffer.toString();
     }
 
 }

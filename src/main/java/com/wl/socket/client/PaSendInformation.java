@@ -1,27 +1,23 @@
 package com.wl.socket.client;
 
-import com.wl.entity.DeskInformation;
-import com.wl.util.ByteUtil;
-import com.wl.util.CheckUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Arrays;
 
 /**
- *扫描上件台发送给PLC
- * Created by Vincent on 2018-06-26.
+ * Created by Vincent on 2018-07-19.
  */
-public class ScanCodeSendStation extends Thread{
+public class PaSendInformation {
 
-    private static Logger logger = LogManager.getLogger(ScanCodeSendStation.class);
+    private static Logger logger = LogManager.getLogger(PaSendInformation.class);
 
-    public ScanCodeSendStation(){
+    public static boolean[] f = new boolean[48];
 
-    }
+    private static byte[] bytes = new byte[19];
+
 
     //服務器地址
     public static final String IP_ADR = "10.96.10.180";
@@ -31,9 +27,7 @@ public class ScanCodeSendStation extends Thread{
 
     static DataOutputStream outputStream = null;
 
-
-
-    public static void scanCodeSendPLC(final DeskInformation deskInformation) {
+    public static void sendMesToPLC() {
         final Socket socket;
         try {
 
@@ -43,16 +37,19 @@ public class ScanCodeSendStation extends Thread{
 
             outputStream = new DataOutputStream(socket.getOutputStream());
 
+            initMsg();
 
             while (true){
 
                 try {
-                    outputStream.write(ByteUtil.hexStr2ByteArray(CheckUtil.getScanCode(deskInformation)));
-                    logger.info("发送命令:{}" , Arrays.toString(ByteUtil.hexStr2ByteArray(CheckUtil.getScanCode(deskInformation))));
+
+                    outputStream.write(bytes);
                     break;
 
-                } catch (IOException e) {
+                } catch (Exception e) {
+
                     logger.error("发送命令异常: " ,e.getMessage());
+
                 }finally {
                     if (socket != null) {
                         try {
@@ -71,7 +68,20 @@ public class ScanCodeSendStation extends Thread{
 
     }
 
-
-
-
+    //初始化数据
+    private static void initMsg() {
+        bytes[0] = (byte) 165;//码头
+        bytes[1] = (byte) 165;//码头
+        bytes[2] = (byte) 1;//数据类型
+        bytes[3] = (byte) 19;//数据长度
+        bytes[4] = (byte) 10;//上位机编号
+        bytes[11] = (byte) 0;//备用
+        bytes[12] = (byte) 0;//备用
+        bytes[13] = (byte) 0;//备用
+        bytes[14] = (byte) 0;//备用
+        bytes[15] = (byte) 0;//校验
+        bytes[16] = (byte) 0;//校验
+        bytes[17] = (byte) 90;//马尾
+        bytes[18] = (byte) 90;//马尾
+    }
 }

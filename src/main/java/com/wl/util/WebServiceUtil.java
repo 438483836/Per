@@ -18,7 +18,7 @@ public class WebServiceUtil {
 
     private static Logger logger = LogManager.getLogger(WebServiceUtil.class);
 
-    private static String url = "http://192.168.0.110:8086/WebService1.asmx?wsdl";
+    private static String url = "http://192.168.0.105:8086/WebService1.asmx?wsdl";
     private static String namespace = "http://tempuri.org/";
     private static String methodName = "HelloWorld";
     private static String soapActionURI = "http://tempuri.org/HelloWorld";

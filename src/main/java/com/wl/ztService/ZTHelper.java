@@ -34,14 +34,13 @@ public class ZTHelper {
 
         String plain = Env.url + "data=" + URLEncoder.encode(requestData,"UTF-8")+ "&data_digest=" + data_digest + "&msg_type=" + Env.msg_type + "&company_id=" + Env.company_id;
 
-        logger.info("接口url: " + plain);
-
         try {
 
             JSONObject response = HttpHelper.httpGet(plain);
             logger.info("paMessUpload response:{}", response);
 
             if (response.containsKey("status")){
+                String status = response.getString("status");
                 String packageCode = response.getString("packageCode");
                 String sortMode = response.getString("sortMode");
                 String destSiteCode = response.getString("destSiteCode");
@@ -55,6 +54,7 @@ public class ZTHelper {
                 }
 
                 ZtoResponseTO ztoResponseTO = new ZtoResponseTO();
+                ztoResponseTO.setStatus(status);
                 ztoResponseTO.setPackageCode(packageCode);
                 ztoResponseTO.setSortMode(sortMode);
                 ztoResponseTO.setDestSiteCode(destSiteCode);

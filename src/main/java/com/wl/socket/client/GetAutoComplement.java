@@ -4,7 +4,8 @@ import com.wl.entity.Complement;
 import com.wl.service.ComplementService;
 import com.wl.util.ByteUtil;
 import com.wl.util.CheckUtil;
-import com.wl.util.TypeConversion;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,6 +18,8 @@ import java.net.Socket;
  * Created by Vincent on 2018-06-19.
  */
 public class GetAutoComplement {
+
+    private static Logger logger = LogManager.getLogger(GetAutoComplement.class);
 
     private static byte[] bytes = new byte[33];
     private static byte[] buf = new byte[33];
@@ -32,13 +35,13 @@ public class GetAutoComplement {
             //连接服务地址
             final ServerSocket ss = new ServerSocket(2000);
 
-            System.out.println("启动服务器....");
+            logger.info("自动补码服务启动....");
 
             final Socket s = ss.accept();
 
             //System.out.println("服务器连接状态......" + ss.accept());
 
-            System.out.println("客户端：" + s.getInetAddress().getLocalHost() + "已连接到客服端");
+            logger.info("客户端：" + s.getInetAddress().getLocalHost() + "已连接到客服端");
 
             try {
                 dataInputStream = new DataInputStream(s.getInputStream());
@@ -59,8 +62,18 @@ public class GetAutoComplement {
 
                             String plcData = ByteUtil.toHexString1(buf);
 
-                            System.out.println("接受======>>" + plcData);
+                            logger.info("接受:{}" + plcData);
 
+                            byte[] dataPacket = ByteUtil.subBytes(buf,2,1);
+                            byte[] packetSize = ByteUtil.subBytes(buf,3,1);
+                            byte[] plcCode = ByteUtil.subBytes(buf,4,1);
+                            byte[] barCode = ByteUtil.subBytes(buf,5,16);
+                            byte[] packageInt = ByteUtil.subBytes(buf,21,2);
+                            byte[] packageDec = ByteUtil.subBytes(buf,23,2);
+                            byte[] slogan = ByteUtil.subBytes(buf,25,2);
+                            byte[] backup = ByteUtil.subBytes(buf,27,2);
+                            byte[] checkData = ByteUtil.subBytes(buf,29,2);
+/*
                             String dataPacket = plcData.substring(4,6);
 
                             String packetSize = plcData.substring(6,8).toUpperCase();
@@ -77,25 +90,25 @@ public class GetAutoComplement {
 
                             String backup = plcData.substring(54,58);
 
-                            String checkData = plcData.substring(58,62);
+                            String checkData = plcData.substring(58,62);*/
 
 
                             Complement complement = new Complement();
-                            complement.setDataPacket(dataPacket);
-                            complement.setPacketSize(String.valueOf(TypeConversion.hexToDecimal(packetSize)));
-                            complement.setPlcCode(plcCode);
-                            complement.setBarCode(barCode);
-                            complement.setPackageInt(packageInt);
-                            complement.setPackageDec(packageDec);
-                            complement.setSlogan(String.valueOf(TypeConversion.hexToDecimal(slogan)));
-                            complement.setBackup(backup);
-                            complement.setCheckData(checkData);
+                            complement.setDataPacket(ByteUtil.toHexString1(dataPacket));
+                            complement.setPacketSize(ByteUtil.toHexString1(packetSize));
+                            complement.setPlcCode(ByteUtil.toHexString1(plcCode));
+                            complement.setBarCode(ByteUtil.toHexString1(barCode));
+                            complement.setPackageInt(ByteUtil.toHexString1(packageInt));
+                            complement.setPackageDec(ByteUtil.toHexString1(packageDec));
+                            complement.setSlogan(ByteUtil.toHexString1(slogan));
+                            complement.setBackup(ByteUtil.toHexString1(backup));
+                            complement.setCheckData(ByteUtil.toHexString1(checkData));
 
-                            Complement complement2 = complementService.getByBarcode(barCode);
+                            Complement complement2 = complementService.getByBarcode(ByteUtil.toHexString1(barCode));
 
                             if (complement2 != null){
 
-                                System.out.println("该条码数据库已存在！！！！！");
+                                logger.info("该条码数据库已存在！！！！！");
 
                                 dataOutputStream = new DataOutputStream(s.getOutputStream());
 
@@ -108,15 +121,13 @@ public class GetAutoComplement {
                                 int comp = complementService.save(complement);
                                 if (comp > 0){
 
-                                    System.out.println("保存数据成功！！！");
-                                }
-
-                                if (plcData.length() > 0){
+                                    logger.info("保存数据成功！！！");
                                     dataOutputStream = new DataOutputStream(s.getOutputStream());
-                                    Complement complement1 = complementService.getByBarcode(barCode);
+                                    Complement complement1 = complementService.getByBarcode(ByteUtil.toHexString1(barCode));
 
                                     while (true){
                                         dataOutputStream.write(ByteUtil.hexStr2ByteArray(CheckUtil.getBarcode(complement1)));
+                                        logger.info("发送命令: ",CheckUtil.getBarcode(complement1));
                                         break;
                                     }
 
@@ -135,7 +146,7 @@ public class GetAutoComplement {
 
         } catch (IOException e) {
 
-            System.out.println("客户端异常:" + e.getMessage());
+            logger.error("客户端异常:" + e.getMessage());
 
         }
 

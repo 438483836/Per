@@ -1,44 +1,52 @@
 package com.wl.socket.thread;
 
-import com.wl.socket.SocketConfig;
-import com.wl.socket.client.ClientGetMsg;
+import com.wl.service.AutoPackBackMessService;
+import com.wl.socket.client.PaGetInformation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
 /**
- * @author jianghc
- * @create 2017-04-16 10:19
- **/
-public class GetMsgThread {
+ * 自动集包线程
+ * Created by Vincent on 2018-07-19.
+ */
+public class AutoPackBackMessThread {
 
-    private static Logger logger = LogManager.getLogger(GetMsgThread.class);
+    private static Logger logger = LogManager.getLogger(AutoPackBackMessThread.class);
+
+    @Autowired
+    private AutoPackBackMessService autoPackBackMessService;
 
     @PostConstruct
-    public void initService() {
+    public void initService(){
+
         Thread thread = new Thread(new Runnable() {
             public void run() {
                 int i = 0;
+
                 try {
-                    Thread.sleep(5 * 1000); //5秒后启动异步线程
+
+                    Thread.sleep(5 * 1000);
+
                 } catch (InterruptedException e) {
+
                     e.printStackTrace();
+
                 }
-                while (true) {
+
+                while (true){
                     if (i > 10) {
                         logger.error("已失败10次，不再尝试连接");
                         break;
                     }
-                    logger.info("第"+i+"次尝试=====异步线程启动===>>>" + SocketConfig.getIp() + "====>>" + SocketConfig.getPort());
-                    ClientGetMsg.getMsgFromPlc();
-                    i++;
+                    PaGetInformation.getMesFromPLC(autoPackBackMessService);
                 }
             }
         });
-       
-
+        //thread.start();
     }
 
-}
 
+}
