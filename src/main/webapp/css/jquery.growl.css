@@ -83,3 +83,13 @@
 .growl .growl-message {
     font-size: 14px;
     line-height: 18px; }
+
+body{
+    font-family: 'Droid Sans', sans-serif;
+    font-size:100%;
+    background:#FFFFFF;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+}

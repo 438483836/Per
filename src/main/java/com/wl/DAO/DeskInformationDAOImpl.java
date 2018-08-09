@@ -1,6 +1,5 @@
-package com.wl.DAO;
+package com.wl.dao;
 
-import com.wl.entity.Complement;
 import com.wl.entity.DeskInformation;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;

@@ -1,6 +1,6 @@
 package com.wl.service;
 
-import com.wl.DAO.ExpressDAO;
+import com.wl.dao.ExpressDAO;
 import com.wl.entity.Express;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

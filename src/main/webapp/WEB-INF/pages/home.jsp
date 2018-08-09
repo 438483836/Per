@@ -1,36 +1,18 @@
-<!DOCTYPE html>
-<br>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
+<html>
 <head>
+    <title>实贝后台操作系统</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <title>物流测试</title>
-    <script type="text/javascript" src="index.js"></script>
-    <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
-    <!--<script src="https://cdn.bootcss.com/jquery//2.0.2/jquery.min.js" type="text/javascript"></script>-->
-    <script type="text/javascript" src="jquery.growl.js"></script>
-    <link href="jquery.growl.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src='<s:url value="/js/index.js"></s:url>'></script>
+    <script type="text/javascript" src='<s:url value="/js/jquery-1.11.1.min.js"></s:url>'></script>
+    <script type="text/javascript" src='<s:url value="/js/jquery.growl.js"></s:url>'></script>
+    <link href='<s:url value="/css/jquery.growl.css"></s:url>' rel="stylesheet" type="text/css" />
 
 </head>
-<div>
-    <h2>登录测试</h2>
-    <span>用户名：</span>
-    <input type="text" name="user" id="user" value="zhangxing">
-    <span>密码：</span>
-    <input type="password" name="pwd" id="pwd" value="12345">
-    <input type="button" name="login" id="login" value="登录" onclick="login()">
-</div>
-</br>
-<h2>上件测试</h2>
-<div>
-    <span>条码:</span>
-    <input type="text" name="barcode" id="barcode" value="">
-    <span>上件口：</span>
-    <input type="text" name="smt" id="smt" value="1">
-    <span>闸口：</span>
-    <input type="text" name="exit" id="exit" value="0021">
-    <input type="button" name="up" id="up" value="确认" onclick="up()">
-</div>
-</br>
+<body>
+
 <h2>集包测试</h2>
 <div>
     <span>下包口（0~47）:</span>
@@ -81,6 +63,14 @@
     <input type="button" name="submit" id="submit" value="提交" onclick="paInformationUp()">
 </div>
 
+</br>
+<h3>上传图片</h3>
+<div>
+    <form action="/saveProduct" method="post" enctype="multipart/form-data">
+        <input type="file" name="uploadFile">
+        <input type="submit" value="确定">
+    </form>
+</div>
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-package com.wl.DAO;
+package com.wl.dao;
 
 import com.wl.entity.Express;
 import org.hibernate.Criteria;
@@ -6,7 +6,6 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

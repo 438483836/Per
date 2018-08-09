@@ -1,8 +1,6 @@
-package com.wl.DAO;
+package com.wl.dao;
 
 import com.wl.entity.User;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;

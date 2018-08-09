@@ -1,6 +1,6 @@
 package com.wl.service;
 
-import com.wl.DAO.ComplementDAO;
+import com.wl.dao.ComplementDAO;
 import com.wl.entity.Complement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

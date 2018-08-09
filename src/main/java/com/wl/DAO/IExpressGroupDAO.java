@@ -1,10 +1,7 @@
 
-package com.wl.DAO;
+package com.wl.dao;
 
-import com.wl.entity.Express;
 import com.wl.entity.ExpressGroup;
-
-import java.util.List;
 
 /**
  * Created by Administrator on 2017/5/20.

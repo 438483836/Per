@@ -19,7 +19,7 @@
 		</RollingFile>
 	</Appenders>
 	<Loggers>
-		<logger name="com.wl.DAO" level="INFO"/>
+		<logger name="com.wl.dao" level="INFO"/>
 		<logger name="org.hibernate">
 			<level value="info" />
 		</logger>
@@ -30,7 +30,7 @@
 			<level value="DEBUG" />
 		</logger>
 		<!-- 打印SQL语句 -->
-		<logger name="org.hibernate.tool.hbm2ddl.">
+		<logger name="org.hibernate.tool.hbm2ddl.DatabaseExporter">
 			<level value="DEBUG" />
 		</logger>
 		<Root level="DEBUG">

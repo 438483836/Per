@@ -102,7 +102,7 @@ public class HttpHelper {
                 String resultStr = EntityUtils.toString(entity, "utf-8");
 
                 JSONObject result = JSON.parseObject(resultStr);
-                if (result.getString("errcode") == "status") {
+                if (result.getString("errcode").equals("status")) {
                     result.remove("errcode");
                     result.remove("errmsg");
                     return result;

@@ -1,4 +1,4 @@
-﻿var base_url = 'http://localhost:8080';
+﻿var base_url = 'http://10.10.10.126:8080';
 
 
 var login = function () {

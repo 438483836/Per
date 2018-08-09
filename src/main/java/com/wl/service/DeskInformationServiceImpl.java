@@ -1,6 +1,6 @@
 package com.wl.service;
 
-import com.wl.DAO.DeskInformationDAO;
+import com.wl.dao.DeskInformationDAO;
 import com.wl.entity.DeskInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

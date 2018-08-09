@@ -1,6 +1,6 @@
 package com.wl.service;
 
-import com.wl.DAO.DeskBackMessDAO;
+import com.wl.dao.DeskBackMessDAO;
 import com.wl.entity.DeskBackMess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,5 @@
-package com.wl.DAO;
+package com.wl.dao;
 
-import com.wl.DAO.IExpressGroupDAO;
 import com.wl.entity.ExpressGroup;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;

@@ -1,4 +1,4 @@
-package com.wl.DAO;
+package com.wl.dao;
 
 import com.wl.entity.AutoPackBackMess;
 import org.hibernate.SessionFactory;

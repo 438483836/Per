@@ -1,6 +1,6 @@
 package com.wl.service;
 
-import com.wl.DAO.AutoPackBackMessDAO;
+import com.wl.dao.AutoPackBackMessDAO;
 import com.wl.entity.AutoPackBackMess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
