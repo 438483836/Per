@@ -50,6 +50,11 @@ public class MainController {
         return "login";
     }
 
+    @RequestMapping(value = "/registered")
+    public Object registered(){
+        return "registered";
+    }
+
     @RequestMapping(value = "loginVaData")
     public Object loginVaData(HttpServletRequest request, HttpServletResponse response,Model model) throws IOException {
         String userName = request.getParameter("user");

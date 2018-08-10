@@ -6,8 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +58,27 @@ public class UserServiceImpl implements UserService {
             }
         }
 
+        return result;
+    }
+
+    public Map<String, Object> registeredData(String firstName, String lastName, String email,String password,String introduction) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        if (StringUtils.isEmpty(firstName) || StringUtils.isEmpty(lastName) || StringUtils.isEmpty(email) || StringUtils.isEmpty(password)){
+            result.put("code","0002");
+            result.put("codeDesc","用户或者邮箱不能为空！！");
+        }else {
+            result.put("data",true);
+            result.put("code","0000");
+            result.put("codeDesc","注册成功");
+            User u = new User();
+            u.setFirstName(firstName);
+            u.setLastName(lastName);
+            u.setEmail(email);
+            u.setPassword(password);
+            u.setIntroduction(introduction);
+            u.setUsername(firstName + lastName);
+            userDao.save(u);
+        }
         return result;
     }
 }

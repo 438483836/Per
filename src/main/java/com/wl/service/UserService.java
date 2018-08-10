@@ -11,4 +11,5 @@ public interface UserService {
     public List<User> getAllUsernames();
     public User getByNameAndPwd(String user,String pwd);
     public Map<String, Object> loginVaData(String user,String pwd);
+    public Map<String, Object> registeredData(String firstName,String lastName,String email,String password,String introduction);
 }
