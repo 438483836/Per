@@ -50,7 +50,7 @@
 <div class="clear"> </div>
 <!--- footer --->
 <div class="footer">
-    <p>Copyright &copy; 2018.</p>
+    <p>Copyright &copy; 2018.实贝科技</p>
 </div>
 
 </body>
